@@ -119,6 +119,6 @@ app.get("/api", async (req, res) => {
 const port = process.env.PORT || config.get("port");
 const host = '0.0.0.0';
 
-app.listen(port, host, function() {
+app.listen(port, function() {
   console.log(`Server started on port ${port}...`);
 });
