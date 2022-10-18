@@ -6,7 +6,7 @@ const Driver = require('../store/Driver');
 
 router.get("/", async (req, res) => {
     try {
-        let driversNotConf = await Driver.find({ groupConfirmation: false})
+        let driversNotConf = await Driver.find({ groupConfirmation: false, group: req.query.driverGroup})
         if (!driversNotConf[0]){
             driversNotConf = [{
                 name: "لا يوجد أي طلبات للتوثيق",
@@ -17,7 +17,6 @@ router.get("/", async (req, res) => {
                 id: 5
             }]}
 
-        console.log("driversNotConf", driversNotConf)
         res.status(201).send(driversNotConf);
 
     } catch (error) {
@@ -27,9 +26,7 @@ router.get("/", async (req, res) => {
 
 });
 
-router.post("/", async (req, res) => {
-    console.log("req.params.id", req.query.id)
-   
+router.post("/", async (req, res) => {   
     try {
         let updateConfirm = await Driver.updateOne({ id: parseInt(req.query.id) }, { $set: { groupConfirmation: true }})
         res.status(201).send(updateConfirm)
@@ -42,8 +39,6 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/", async (req, res) => {
-    console.log("req.query.id", req.query.id)
-
       try {
         
         const confirmDelete = await Driver.updateOne(
@@ -54,6 +49,7 @@ router.put("/", async (req, res) => {
           return res.status(404).send(error.message)
         }
     });
+
 
 module.exports = router;
 

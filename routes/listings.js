@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 const multer = require("multer");
+const moment = require('moment');
 
 
 const store = require("../store/listings");
@@ -33,8 +34,10 @@ const schema = {
 };
 
 router.get("/", async (req, res) => {
+  let dateTo = moment().format("yyyy-MM-DDTHH:mm:ss.SSS");
+  let dateFrom = moment().subtract(6,'d').format("yyyy-MM-DDTHH:mm:ss.SSS");  
   try {
-    let listings = await Listing.find({ useId: req.query.userId});
+    let listings = await Listing.find({ useId: req.query.userId, creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom}});
     // const listings = await store.getListings();
 
     if (!listings[0]){
@@ -57,7 +60,6 @@ router.get("/", async (req, res) => {
 });
 
 router.delete("/", async (req, res) => {
-  console.log("listingsUser", req.query.listingId)
   const listingId = req.query.listingId
     try {
       
@@ -96,8 +98,6 @@ router.post(
 
     try{
       let IdserialImport = await Idserial.findOne()
-
-      console.log("req.body.addressCateIdListing", req.body.addressCateIdListing)
 
       if (!IdserialImport.idListing) {
         await Idserial.updateOne(IdserialImport, { idListing: defaultIdSerial})

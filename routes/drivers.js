@@ -73,8 +73,6 @@ router.post("/",[
 
 router.get("/", async (req, res) => {
   try {
-    // res.send(driversStore.getdrivers());
-    console.log ("hi drivers")
     const drivers = await Driver.find()
     res.send(drivers)
   } catch (error) {

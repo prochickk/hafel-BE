@@ -6,7 +6,8 @@ const User = require('../store/User');
 
 router.get("/", async (req, res) => {
     try {
-        let usersNotConf = await User.find({ groupConfirmation: false})
+
+        let usersNotConf = await User.find({ groupConfirmation: false, group: req.query.driverGroup})
         if (!usersNotConf[0]){
             usersNotConf = [{
                 name: "لا يوجد أي طلبات للتوثيق",
@@ -17,7 +18,6 @@ router.get("/", async (req, res) => {
                 id: 5
             }]}
 
-        console.log("usersNotConf", usersNotConf)
         res.status(201).send(usersNotConf);
 
     } catch (error) {
@@ -27,9 +27,7 @@ router.get("/", async (req, res) => {
 
 });
 
-router.post("/", async (req, res) => {
-    console.log("req.params.id", req.query.id)
-   
+router.post("/", async (req, res) => {   
     try {
         let updateConfirm = await User.updateOne({ id: parseInt(req.query.id) }, { $set: { groupConfirmation: true }})
         res.status(201).send(updateConfirm)
@@ -38,12 +36,9 @@ router.post("/", async (req, res) => {
         console.log(error.message)
     return res.status(404).send(error.message)
   }
-  
-
 });
 
 router.put("/", async (req, res) => {
-    console.log("req.query.id", req.query.id)
 
       try {
         
