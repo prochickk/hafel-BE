@@ -11,8 +11,6 @@ const Driver = require('../store/Driver')
 //router.get("/:id", auth, (req, res) => {
 router.get("/:id", async (req, res) => {
   const driverId = parseInt(req.params.id);
-  console.log("req.query.id", req.params.id)
-  console.log (" driver hi")
   
   const driverr = await Driver.find({ id: driverId})
   const driver = driverr[0]

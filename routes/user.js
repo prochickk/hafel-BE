@@ -12,12 +12,11 @@ const User = require('../store/User')
 router.get("/:id", async (req, res) => {
   const userId = parseInt(req.params.id);
   // const user = usersStore.getUserById(userId);
-  console.log("req.params.id", userId);
-  console.log("typeof", typeof(userId));
+
   
   try {
     const user = await User.findOne({ id: userId});
-    console.log("user", user);
+
     
     res.status(201).send(user);
 

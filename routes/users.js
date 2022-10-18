@@ -32,7 +32,7 @@ router.post("/",[
   if (usersStore.getUserByEmail(req.body.email) || userEmail[0] || userMobile[0]) 
     return res
       .status(400)
-      .send({ error: "A user with the given email or Mobile Number already exists." });
+      .send({ error: "تم استخدام هذا الإيميل او رقم الجوال من قبل مستخدم اخر" });
 
   const user = { 
     name: req.body.name,

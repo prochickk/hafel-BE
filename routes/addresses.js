@@ -54,7 +54,6 @@ router.get("/", async (req, res) => {
 });
 
 router.delete("/", async (req, res) => {
-  console.log("addresssUser", req.query.addressId)
   const addressId = req.query.addressId
     try {
       

@@ -49,7 +49,6 @@ router.get("/", async (req, res) => {
 });
 
 router.delete("/", async (req, res) => {
-  console.log("schedulesUser", req.query.scheduleId)
   const scheduleId = req.query.scheduleId
     try {
       

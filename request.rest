@@ -2,6 +2,8 @@ GET http://localhost:9000/api/addres/631ffa435b418c5ba6a8e607
 
 ###
 GET http://localhost:9000/api
+###
+GET http://localhost:9000/api/regions?driverGroup=الـــبــــاشــــا
 
 ###
 GET http://localhost:9000/api/listings?userId= 4
@@ -13,3 +15,5 @@ GET http://localhost:9000/api/schedules?userId= 4
 GET http://localhost:9000/api/users
 ###
 GET https://sary.onrender.com/api
+###
+GET http://localhost:9000/api/driversConfirm/confirmed

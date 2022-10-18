@@ -11,6 +11,8 @@ router.get("/listings", auth, (req, res) => {
   );
   const resources = listings.map(listingMapper);
   res.send(resources);
+
+  
 });
 
 module.exports = router;

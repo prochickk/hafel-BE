@@ -3,6 +3,7 @@ const router = express.Router();
 const Joi = require("joi");
 const multer = require("multer");
 const moment = require('moment');
+const SimpleDateFormat = require('@riversun/simple-date-format');
 
 const validateWith = require("../middleware/validation");
 const auth = require("../middleware/auth");
@@ -31,33 +32,27 @@ const schema = {
 };
 
 router.get("/", async (req, res) => {
-  console.log("req.query.driverGroup", req.query.driverGroup)
-  console.log("req.query", req.query.hourFilter)
-  console.log("regionFilter", req.query.regionFilter)
-  console.log("goBackFilter", req.query.goBackFilter)
+
+  let dateTo = moment().format("yyyy-MM-DDTHH:mm:ss.SSS");
+  let dateFrom = moment().subtract(6,'d').format("yyyy-MM-DDTHH:mm:ss.SSS");
   
   try {
-    let filteredObject = {groupL: req.query.driverGroup}
+    let filteredObject = {groupL: req.query.driverGroup, creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom} }
         
     if (req.query.dayFilter !== "currentDay") {
       filteredObject["tripDayEng"] = req.query.dayFilter
-      console.log("objectr", filteredObject)
     }
     if (req.query.hourFilter !== "allHours") {
       filteredObject["tripTimeL"] = req.query.hourFilter
-      console.log("objectr", filteredObject)
     }
     if (req.query.regionFilter !== "allRegions") {
       filteredObject["addressRegionL"] = req.query.regionFilter
-      console.log("objectr", filteredObject)
     }
     if (req.query.goBackFilter !== "allGoBack") {
       filteredObject["tripTypeL"] = req.query.goBackFilter
-      console.log("objectr", filteredObject)
     }
     
     let listings = await Listing.find(filteredObject)
-    console.log("before listings", listings)
 
     if (!listings[0]) {
       listings = [{
@@ -110,9 +105,6 @@ router.post(
         await Idserial.updateOne(IdserialImport, { idListing: defaultIdSerial })
         IdserialImport = await Idserial.findOne();
       }
-
-      console.log("req.body.addressCateIdListing", req.body.addressCateIdListing)
-
       const IdserialDbUpdate = await Idserial.updateOne(
         { idListing: IdserialImport.idListing },
         { $inc: { idListing: 1 } });
