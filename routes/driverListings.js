@@ -39,11 +39,6 @@ router.get("/", async (req, res) => {
   try {
     let filteredObject = {groupL: req.query.driverGroup, creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom} }
         
-    console.log("req.query.dayFilter", req.query.dayFilter)
-    console.log("req.query.hourFilter", req.query.hourFilter)
-    console.log("req.query.regionFilter", req.query.regionFilter)
-    console.log("req.query.goBackFilter", req.query.goBackFilter)
-    console.log("req.query.driverGroup", req.query.driverGroup)
     if (req.query.dayFilter !== "currentDay") {
       filteredObject["tripDayEng"] = req.query.dayFilter
     }
