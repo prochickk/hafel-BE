@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const regionSchema = new mongoose.Schema({
   id: Number,
   group: String,
+  groupList: String,
   name: String,
+
   adminId: Number,
   adminNumber: Number,
 })
