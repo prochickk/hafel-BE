@@ -96,9 +96,10 @@ app.use("/api/expoPushTokens", expoPushTokens);
 app.use("/api/messages", messages);
 
 app.get("/api", async (req, res) => {
-res.send("hi")
+  res.send("hi")
   // try {
-  //   const Region = await Regions.updateMany({adminNumber: {$exists: false}},  { $set: { adminNumber: 581302920 }});
+  //   // const Region = await Regions.updateMany({adminNumber: {$exists: false}},  { $set: { adminNumber: 581302920 }});
+  //   const Region = await Regions.create({groupList: 'بــن احــمــد'});
   //    res.send(Region) 
   // } catch (error) {
   //   return res.status(404).send(error.message)
