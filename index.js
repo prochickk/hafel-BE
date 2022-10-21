@@ -112,7 +112,7 @@ app.get("/api", async (req, res) => {
   // let x3 = "Tuesday"
   // let x4 = "Wednesday"
   // let x5 = "Thursday"
-  // let x6 = "Friday"
+  // let x6 = "Friday" 
   
   // let compare = x5 >= x3 ? true : false
   // console.log("compare", compare);
