@@ -35,10 +35,30 @@ const schema = {
 
 router.get("/", async (req, res) => {
   let dateTo = moment().format("yyyy-MM-DDTHH:mm:ss.SSS");
-  let dateFrom = moment().subtract(6,'d').format("yyyy-MM-DDTHH:mm:ss.SSS");  
+  let dateFrom = moment().subtract(5,'d').format("yyyy-MM-DDTHH:mm:ss.SSS"); 
+ 
+  const engToArbDay = (EngilshDay) => {
+    if (EngilshDay == "Sunday") {return "الأحد"
+    } else if (EngilshDay == "Monday") {return "الأثنين"
+    } else if (EngilshDay == "Tuesday") {return "الثلاثاء"
+    } else if (EngilshDay == "Wednesday") {return "الأربعاء"
+    } else if (EngilshDay == "Thursday") {return "الخميس"
+    } else {return "الأحد"}
+  }
+  
+  let day = engToArbDay(moment().format('dddd'));
+  let dayAfter = engToArbDay(moment().add(1,'d').format('dddd'));
+
   try {
-    let listings = await Listing.find({ useId: req.query.userId, creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom}});
-    // const listings = await store.getListings();
+    console.log("day", day)
+    console.log("res.query.day", req.query.day)
+    console.log("dayAfter", dayAfter)
+
+    if (req.query.day != "currentDay") {
+      day = req.query.day
+    }
+    let listings = await Listing.find({ useId: req.query.userId, tripDayL: [day, dayAfter], creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom}});
+
 
     if (!listings[0]){
       listings = [{

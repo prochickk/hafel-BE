@@ -51,7 +51,9 @@ mongoose.connect("mongodb+srv://bus123:12345@cluster0.kx3lumu.mongodb.net/?retry
 // const getdetails = require('./routes/auth');
 const User = require('./store/User');
 const Idserial = require('./store/Idserial');
-const Regions = require('./store/Regions')
+const Regions = require('./store/Regions');
+const Listing = require("./store/Listing");
+const ListingHistory = require("./store/ListingsHistory");
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -96,7 +98,7 @@ app.use("/api/expoPushTokens", expoPushTokens);
 app.use("/api/messages", messages);
 
 app.get("/api", async (req, res) => {
-  res.send("hi")
+  // res.send("hi")
   // try {
   //   // const Region = await Regions.updateMany({adminNumber: {$exists: false}},  { $set: { adminNumber: 581302920 }});
   //   const Region = await Regions.create({groupList: 'بــن احــمــد'});
@@ -104,6 +106,30 @@ app.get("/api", async (req, res) => {
   // } catch (error) {
   //   return res.status(404).send(error.message)
   // }
+  let dateTo = moment().format("yyyy-MM-DDTHH:mm:ss.SSS");
+  let dateFrom = moment().subtract(6,'d').format("yyyy-MM-DDTHH:mm:ss.SSS");
+  let dayName = moment().format('dddd');
+  let dayName1 = moment().format('dddd');
+  let dayName2 = moment().subtract(4,'d').format('dddd');
+  let listings = await Listing.find({groupL: "الـــبــــاشــــا", creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom} });
+  // let listingsHistory = await ListingHistory.create({groupL: "الـــبــــاشــــا", creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom} });
+  console.log("dateTo", dateTo);
+  console.log("dateFrom", dateFrom);
+  console.log("dayName", dayName);
+  console.log("dayName1", dayName1);
+  console.log("dayName2", dayName2);
+  
+  let x0 = "Saturday"
+  let x1 = "Sunday"
+  let x2 = "Monday"
+  let x3 = "Tuesday"
+  let x4 = "Wednesday"
+  let x5 = "Thursday"
+  let x6 = "Friday"
+  
+  let compare = x5 >= x3 ? true : false
+  console.log("compare", compare);
+  res.send(listings);
 })
 
 const port = process.env.PORT || config.get("port");

@@ -8,7 +8,7 @@ const addressSchema = new mongoose.Schema({
 })
 
 
-const listingSchema = new mongoose.Schema({
+const listingHistorySchema = new mongoose.Schema({
     tripTypeL: String,
     tripTimeL: String,
     tripDayL: String, 
@@ -25,4 +25,4 @@ const listingSchema = new mongoose.Schema({
     },
 })
 
-module.exports = mongoose.model("Listing", listingSchema);
+module.exports = mongoose.model("ListingHistory", listingHistorySchema);
