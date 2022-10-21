@@ -56,6 +56,7 @@ router.get("/", async (req, res) => {
 
     if (req.query.day != "currentDay") {
       day = req.query.day
+      dayAfter = req.query.day
     }
     let listings = await Listing.find({ useId: req.query.userId, tripDayL: [day, dayAfter], creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom}});
 
