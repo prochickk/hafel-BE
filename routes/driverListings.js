@@ -35,12 +35,15 @@ router.get("/", async (req, res) => {
 
   let dateTo = moment().format("yyyy-MM-DDTHH:mm:ss.SSS");
   let dateFrom = moment().subtract(6,'d').format("yyyy-MM-DDTHH:mm:ss.SSS");
-  
+  let day = moment().format('dddd');
   try {
     let filteredObject = {groupL: req.query.driverGroup, creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom} }
         
     if (req.query.dayFilter !== "currentDay") {
       filteredObject["tripDayEng"] = req.query.dayFilter 
+    }
+    if (req.query.dayFilter == "currentDay") {
+      filteredObject["tripDayEng"] = day 
     }
     if (req.query.hourFilter !== "allHours") {
       filteredObject["tripTimeL"] = req.query.hourFilter
