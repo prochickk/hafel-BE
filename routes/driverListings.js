@@ -43,6 +43,9 @@ router.get("/", async (req, res) => {
       filteredObject["tripDayEng"] = req.query.dayFilter 
     }
     if (req.query.dayFilter == "currentDay") {
+      if (day == "Friday" || "Saturday"){
+        day = "Sunday"
+      }
       filteredObject["tripDayEng"] = day 
     }
     if (req.query.hourFilter !== "allHours") {
