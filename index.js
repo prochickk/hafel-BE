@@ -23,6 +23,7 @@ const schedules = require("./routes/schedules");
 const schedule = require("./routes/schedule");
 const addresses = require("./routes/addresses");
 const address = require("./routes/address");
+const privacyPolicy = require("./routes/PrivacyPolicy");
 
 const drivers = require("./routes/drivers");
 const driver = require("./routes/driver");
@@ -67,6 +68,7 @@ app.use("/api/schedules", schedules);
 
 app.use("/api/addressCates", addressCates);
 app.use("/api/nearLocCates", nearLocCates);
+app.use("/api/privacyPolicy", privacyPolicy);
 
 app.use("/api/regions", regions);
 
