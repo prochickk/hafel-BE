@@ -14,7 +14,6 @@ router.post(
     if (!user) return res.status(400).send({ error: "Invalid user." });
 
     user.expoPushToken = req.body.token;
-    console.log("User registered for notifications: ", user);
     res.status(201).send();
   }
 );
