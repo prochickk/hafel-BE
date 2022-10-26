@@ -50,10 +50,7 @@ router.get("/", async (req, res) => {
   let dayAfter = engToArbDay(moment().add(1,'d').format('dddd'));
 
   try {
-    console.log("day", day)
-    console.log("res.query.day", req.query.day)
-    console.log("dayAfter", dayAfter)
-
+   
     if (req.query.day != "currentDay") {
       day = req.query.day
       dayAfter = req.query.day

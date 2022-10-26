@@ -14,7 +14,6 @@ router.get("/:id", async (req, res) => {
   
   const driverr = await Driver.find({ id: driverId})
   const driver = driverr[0]
-  console.log (" driver hi", driver)
 
   if (!driver) return res.status(404).send();
 
