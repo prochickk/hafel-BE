@@ -15,6 +15,7 @@ const nearLocCates = require("./routes/categories/nearLocCates");
 const driverListings = require("./routes/driverListings");
 const driverSchedules = require("./routes/driverSchedules");
 
+const times = require("./routes/times");
 const regions = require("./routes/regions");
 const listings = require("./routes/listings");
 const listing = require("./routes/listing");
@@ -55,6 +56,7 @@ const Idserial = require('./store/Idserial');
 const Regions = require('./store/Regions');
 const Listing = require("./store/Listing");
 const ListingHistory = require("./store/ListingsHistory");
+const Times = require("./store/Times");
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -71,6 +73,7 @@ app.use("/api/nearLocCates", nearLocCates);
 app.use("/api/privacyPolicy", privacyPolicy);
 
 app.use("/api/regions", regions);
+app.use("/api/times", times);
 
 app.use("/api/categories", categories);
 app.use("/api/listing", listing);
@@ -100,14 +103,16 @@ app.use("/api/expoPushTokens", expoPushTokens);
 app.use("/api/messages", messages);
 
 app.get("/api", async (req, res) => {
-  res.send("hi")
+  // res.send("hi")
   // try {
   //   // const Region = await Regions.updateMany({adminNumber: {$exists: false}},  { $set: { adminNumber: 581302920 }});
-  //   const Region = await Regions.create({groupList: 'بــن احــمــد'});
-  //    res.send(Region) 
+  //   const Timeselement = await Times.create({type: "back", value: "13:45-14:15", icon: "timer-outline"});
+  //    res.send(Timeselement) 
   // } catch (error) {
   //   return res.status(404).send(error.message)
-  // }  
+  // }
+  // "timer-outline"
+  // "timer"
   // let x0 = "Saturday"
   // let x1 = "Sunday"
   // let x2 = "Monday"
@@ -120,7 +125,6 @@ app.get("/api", async (req, res) => {
   // console.log("compare", compare);
   // res.send(listings);
 })
-
 const port = process.env.PORT || config.get("port");
 const host = '0.0.0.0';
 
