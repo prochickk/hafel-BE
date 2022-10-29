@@ -41,7 +41,6 @@ router.get("/", async (req, res) => {
         region: '',
         useId:1,
         idAddress: 1,
-        value: 2,
         }]}
 
     res.send(addresses);

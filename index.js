@@ -57,6 +57,7 @@ const Regions = require('./store/Regions');
 const Listing = require("./store/Listing");
 const ListingHistory = require("./store/ListingsHistory");
 const Times = require("./store/Times");
+const Address = require('./store/Address')
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -103,11 +104,11 @@ app.use("/api/expoPushTokens", expoPushTokens);
 app.use("/api/messages", messages);
 
 app.get("/api", async (req, res) => {
-  // res.send("hi")
+  res.send("hi")
   // try {
-  //   // const Region = await Regions.updateMany({adminNumber: {$exists: false}},  { $set: { adminNumber: 581302920 }});
-  //   const Timeselement = await Times.create({type: "back", value: "13:45-14:15", icon: "timer-outline"});
-  //    res.send(Timeselement) 
+  //   const Addresses= await Address.updateMany({value: {$exists: true}},  { $unset: { value: "" }});
+  //   // const Timeselement = await Times.create({type: "back", value: "13:45-14:15", icon: "timer-outline"});
+  //    res.send(Addresses) 
   // } catch (error) {
   //   return res.status(404).send(error.message)
   // }
