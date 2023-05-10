@@ -1,27 +1,20 @@
 const express = require("express");
 const router = express.Router();
 
-const driversStore = require("../store/drivers");
-// const listingsStore = require("../store/listings");
+const driversStore = require("../module/drivers");
 const auth = require("../middleware/auth");
-const Driver = require('../store/Driver')
+const Driver = require('../module/Driver')
 
 
 
-//router.get("/:id", auth, (req, res) => {
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   const driverId = parseInt(req.params.id);
   
   const driverr = await Driver.find({ id: driverId})
   const driver = driverr[0]
 
   if (!driver) return res.status(404).send();
-
-  // const listings = listingsStore.filterListings(
-  //   listing => listing.driverId === driverId
-  // );
-
-  res.send(driver);
+  res.status(200).send(driver);
   
 });
 

@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const Driver = require('../store/Driver');
-const User = require('../store/User');
+const Driver = require('../module/Driver');
+const User = require('../module/User');
 
 
 router.get("/", async (req, res) => {

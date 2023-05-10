@@ -3,15 +3,15 @@ const router = express.Router();
 const Joi = require("joi");
 const multer = require("multer");
 
-const categoriesStore = require("../store/categories");
+const categoriesStore = require("../module/categories");
 
 const validateWith = require("../middleware/validation");
 const auth = require("../middleware/auth");
 const delay = require("../middleware/delay");
 const config = require("config");
-const Schedule = require('../store/Schedule');
-const Idserial = require("../store/Idserial");
-const Address = require("../store/Address");
+const Schedule = require('../module/Schedule');
+const Idserial = require("../module/Idserial");
+const Address = require("../module/Address");
 const defaultIdSerial = 100000;
 
 const upload = multer({
@@ -29,7 +29,7 @@ const schema = {
   };
 
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     let schedules = await Schedule.find({ group: req.query.driverGroup});
 
@@ -41,46 +41,37 @@ router.get("/", async (req, res) => {
         idSchedule: 0,
         }]}
 
-    res.send(schedules);
+    res.status(200).send(schedules);
   } catch (error) {
     console.log(error.message)
     return res.status(404).send(error.message)
 }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", auth, async (req, res) => {
   const scheduleId = req.query.scheduleId
-    try {
-      
-      const scheduleDelete = await Schedule.deleteOne({ 
-        idSchedule: scheduleId})
-      } catch (error) {
-        console.log(error.message)
-        return res.status(404).send(error.message)
-      }
-      
-    
-      // res.status(201).send(schedule);
+  const scheduleChecks = await Schedule.findOne({ idSchedule: scheduleId })
 
+  if (!scheduleChecks)
+    return res.status(404).send("Item is not found in the Database")
+  
+  try {
+    const scheduleDelete = await Schedule.deleteOne({ 
+      idSchedule: scheduleId})
+      res.status(201).send();
+
+    } catch (error) {
+      console.log(error.message)
+      return res.status(404).send(error.message)
+    }
   });
 
 router.post(
-  "/",
+  "/", auth, 
     [upload.array("images", config.get("maxImageCount")),
     validateWith(schema)], async (req, res) => {
-    const schedule = {
-      typeCateLabel: req.body.typeCateLabel,
-      timeCateLabel: req.body.timeCateLabel,
-      dayCateLabel: req.body.dayCateLabel,
-      addressCateId: parseInt(req.body.addressCateId),
-      group: req.body.group,
-      useId: req.body.useId,
-    };
-    
+        
     const convertToAddressObj = await Address.findOne({ idAddress: req.body.addressCateId })
-
-    if (req.body.location) schedule.location = JSON.parse(req.body.location);
-    if (req.user) schedule.useId = req.user.userId;
 
     try {
       let IdserialImport = await Idserial.findOne()
@@ -92,23 +83,29 @@ router.post(
         { idSchedule: IdserialImport.idSchedule},
         { $inc: { idSchedule: 1 }});
 
-      const scheduledb = await Schedule.create({
+
+      const scheduledb = new Schedule({
         tripType: req.body.typeCateLabel,
         tripTime: req.body.timeCateLabel,
         tripDay: req.body.dayCateLabel,
-        address: convertToAddressObj.region,
-        addressRegion: convertToAddressObj.location,
+        address: parseInt(req.body.addressCateId),
+        addressRegion: convertToAddressObj.region,
         group: req.body.group,
         useId: req.body.useId,
         idSchedule: IdserialImport.idSchedule + 1
       });
+
+      await scheduledb.save()
+
+      const scheduledbb = await Schedule.findOne({addressRegion: convertToAddressObj.region})
+
+      res.status(201).send(scheduledb);
       
     } catch (error) {
       console.log(error.message)
       return res.status(404).send(error.message)
     }
     
-    res.status(201).send(schedule);
   }
 );
 

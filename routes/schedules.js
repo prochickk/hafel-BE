@@ -3,15 +3,15 @@ const router = express.Router();
 const Joi = require("joi");
 const multer = require("multer");
 
-const categoriesStore = require("../store/categories");
+const categoriesStore = require("../module/categories");
 
 const validateWith = require("../middleware/validation");
 const auth = require("../middleware/auth");
 const delay = require("../middleware/delay");
 const config = require("config");
-const Schedule = require('../store/Schedule');
-const Idserial = require("../store/Idserial");
-const Address = require("../store/Address");
+const Schedule = require('../module/Schedule');
+const Idserial = require("../module/Idserial");
+const Address = require("../module/Address");
 const defaultIdSerial = 100000;
 
 const upload = multer({
@@ -29,7 +29,7 @@ const schema = {
   };
 
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     let schedules = await Schedule.find({ useId: req.query.userId});
 
@@ -38,7 +38,6 @@ router.get("/", async (req, res) => {
         tripType: 'قم بإضافة رحلة للجدول الأسبوعي',
         tripTime: '',
         tripDay: 'لا يوجد أي عنصر',
-        // address: 0,
         // useId: 0,
         idSchedule: 0,
         }]}
@@ -50,37 +49,30 @@ router.get("/", async (req, res) => {
 }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", auth, async (req, res) => {
   const scheduleId = req.query.scheduleId
+  const scheduleCheck = await Schedule.findOne({ idSchedule: scheduleId })
+
+  if (!scheduleCheck) return res.status(404).send()
     try {
       
       const scheduleDelete = await Schedule.deleteOne({ 
         idSchedule: scheduleId})
+        res.status(201).send();
       } catch (error) {
         console.log(error.message)
         return res.status(404).send(error.message)
       }
 
-      // res.status(201).send(schedule);
   });
 
 router.post(
-  "/",
+  "/", auth,
     [upload.array("images", config.get("maxImageCount")),
     validateWith(schema)], async (req, res) => {
-    const schedule = {
-      typeCateLabel: req.body.typeCateLabel,
-      timeCateLabel: req.body.timeCateLabel,
-      dayCateLabel: req.body.dayCateLabel,
-      addressCateId: parseInt(req.body.addressCateId),
-      group: req.body.group,
-      useId: req.body.useId,
-    };
-    
+        
     const convertToAddressObj = await Address.findOne({ idAddress: req.body.addressCateId }) 
-
-    if (req.body.location) schedule.location = JSON.parse(req.body.location);
-    if (req.user) schedule.useId = req.user.userId;
+    if (!convertToAddressObj) return res.status(404).send("Invalid address ID")
 
     try {
       let IdserialImport = await Idserial.findOne()
@@ -92,7 +84,7 @@ router.post(
         { idSchedule: IdserialImport.idSchedule},
         { $inc: { idSchedule: 1 }});
 
-      const scheduledb = await Schedule.create({
+      const scheduledb = new Schedule({
         tripType: req.body.typeCateLabel,
         tripTime: req.body.timeCateLabel,
         tripDay: req.body.dayCateLabel,
@@ -102,12 +94,13 @@ router.post(
         useId: req.body.useId,
         idSchedule: IdserialImport.idSchedule + 1
       });
+      await scheduledb.save();
+      res.status(201).send(scheduledb);
       
     } catch (error) {
       console.log(error.message)
       return res.status(404).send(error.message)
     }
-    res.status(201).send(schedule);
   }
 );
 

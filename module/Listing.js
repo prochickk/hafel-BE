@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 var moment = require('moment');  
-const { string } = require('joi');
 
 const addressSchema = new mongoose.Schema({
     latitude: Number,

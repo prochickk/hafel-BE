@@ -5,17 +5,17 @@ const multer = require("multer");
 const moment = require('moment');
 
 
-const store = require("../store/listings");
-const categoriesStore = require("../store/categories");
+const store = require("../module/listings");
+const categoriesStore = require("../module/categories");
 const validateWith = require("../middleware/validation");
 const auth = require("../middleware/auth");
 const delay = require("../middleware/delay");
 const config = require("config");
-const Idserial = require('../store/Idserial')
+const Idserial = require('../module/Idserial')
 const defaultIdSerial = 30000;
 
-const Listing = require('../store/Listing');
-const Address = require("../store/Address");
+const Listing = require('../module/Listing');
+const Address = require("../module/Address");
 
 const upload = multer({
   dest: "uploads/",
@@ -33,7 +33,7 @@ const schema = {
   useId: Joi.number().required(),
 };
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   let dateTo = moment().format("yyyy-MM-DDTHH:mm:ss.SSS");
   let dateFrom = moment().subtract(5,'d').format("yyyy-MM-DDTHH:mm:ss.SSS"); 
  
@@ -55,8 +55,8 @@ router.get("/", async (req, res) => {
       day = req.query.day
       dayAfter = req.query.day
     }
-    let listings = await Listing.find({ useId: req.query.userId, tripDayL: [day, dayAfter], creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom}});
 
+    let listings = await Listing.find({ useId: req.query.userId, tripDayL: [day, dayAfter], creationDate: {$lt: dateTo}, creationDate: {$gt: dateFrom}});
 
     if (!listings[0]){
       listings = [{
@@ -68,7 +68,7 @@ router.get("/", async (req, res) => {
         // useId: 0,
         }]}
 
-    res.send(listings);
+    res.status(200).send(listings);
     
   } catch (error) {
     console.log(error.message)
@@ -77,21 +77,27 @@ router.get("/", async (req, res) => {
 
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", auth, async (req, res) => {
   const listingId = req.query.listingId
+  
+  listingDelete = await Listing.findOne({ idListing: listingId })
+  if (!listingDelete) return res.status(404).send()
+
+
     try {
-      
       const listingDelete = await Listing.deleteOne({ 
-        idListing: listingId})
+        idListing: listingId
+      })
+
+        res.status(201).send();
       } catch (error) {
         console.log(error.message)
         return res.status(404).send(error.message)
       }
-      // res.status(201).send(listing);
   });
 
 router.post(
-  "/",
+  "/", auth,
   [upload.array("images", config.get("maxImageCount")),
     validateWith(schema)], async (req, res) => {
     const listing = {

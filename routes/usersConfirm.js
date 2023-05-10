@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const User = require('../store/User');
+const User = require('../module/User');
+const auth = require("../middleware/auth");
 
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     try {
-
         let usersNotConf = await User.find({ groupConfirmation: false, group: req.query.driverGroup})
         if (!usersNotConf[0]){
             usersNotConf = [{
@@ -27,7 +27,9 @@ router.get("/", async (req, res) => {
 
 });
 
-router.post("/", async (req, res) => {   
+router.post("/", auth, async (req, res) => {  
+    const checkUserConfirm = await User.findOne({ id: parseInt(req.query.id) }) 
+    if (!checkUserConfirm) return res.status(404).send("User is not found")
     try {
         let updateConfirm = await User.updateOne({ id: parseInt(req.query.id) }, { $set: { groupConfirmation: true }})
         res.status(201).send(updateConfirm)
@@ -38,12 +40,14 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/", async (req, res) => {
-
+router.put("/", auth, async (req, res) => {
+      const checkUserConfirm = await User.findOne({ id: req.query.id }) 
+      if (!checkUserConfirm) return res.status(404).send("User is not found")
       try {
         
         const confirmDelete = await User.updateOne(
-            {id: req.query.id}, { $unset: {groupConfirmation: ""}})
+            { id: req.query.id}, { $unset: {groupConfirmation: ""} })
+            res.status(201).send()
 
         } catch (error) {
           console.log(error.message)

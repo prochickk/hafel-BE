@@ -6,7 +6,6 @@ const regionSchema = new mongoose.Schema({
   group: String,
   groupList: String,
   name: String,
-
   adminId: Number,
   adminNumber: Number,
 })

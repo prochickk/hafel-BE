@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const helmet = require("helmet");
 const config = require("config");
 const app = express();
+const db = "mongodb+srv://bus123:12345@cluster0.kx3lumu.mongodb.net/?retryWrites=true&w=majority"
 const compression = require("compression");
 dotenv.config()
 
@@ -34,6 +35,7 @@ const usersConfirm = require("./routes/usersConfirm");
 const driversConfirm = require("./routes/driversConfirm");
 const confirmedUsersDrivers = require("./routes/confirmedUsersDrivers");
 const deletedUsersDrivers = require("./routes/deletedUsersDrivers");
+const passwordForgot = require("./routes/passwordForgot");
 
 const users = require("./routes/users");
 const user = require("./routes/user");
@@ -42,8 +44,9 @@ const driverauth = require("./routes/driverauth");
 const messages = require("./routes/messages");
 const expoPushTokens = require("./routes/expoPushTokens");
 
-mongoose.connect("mongodb+srv://bus123:12345@cluster0.kx3lumu.mongodb.net/?retryWrites=true&w=majority", ()=> {
-  console.log("Databse Connected");
+mongoose.connect(db, ()=> {
+  // console.log(`Databse Connected to ${db} ...`);
+  console.log(`Databse Connected to mongoDb ...`);
 },
 (error) => {
   console.log("Databse can not be connected: " + error);
@@ -51,13 +54,13 @@ mongoose.connect("mongodb+srv://bus123:12345@cluster0.kx3lumu.mongodb.net/?retry
 ); 
 
 // const getdetails = require('./routes/auth');
-const User = require('./store/User');
-const Idserial = require('./store/Idserial');
-const Regions = require('./store/Regions');
-const Listing = require("./store/Listing");
-const ListingHistory = require("./store/ListingsHistory");
-const Times = require("./store/Times");
-const Address = require('./store/Address')
+const User = require('./module/User');
+const Idserial = require('./module/Idserial');
+const Regions = require('./module/Regions');
+const Listing = require("./module/Listing");
+const ListingHistory = require("./module/ListingsHistory");
+const Times = require("./module/Times");
+const Address = require('./module/Address')
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -91,6 +94,7 @@ app.use("/api/confirmedDrivers", confirmedUsersDrivers);
 
 app.use("/api/deletedUsers", deletedUsersDrivers);
 app.use("/api/deletedDrivers", deletedUsersDrivers);
+app.use("/api/passwordForgot", passwordForgot);
 
 app.use("/api/user", user);
 app.use("/api/users", users);
@@ -126,9 +130,14 @@ app.get("/api", async (req, res) => {
   // console.log("compare", compare);
   // res.send(listings);
 })
-const port = process.env.PORT || config.get("port");
+
+
+// const port = process.env.PORT || config.get("port");
+const port = process.env.PORT || 9000
 const host = '0.0.0.0';
 
-app.listen(port, host, function() {
+const server = app.listen(port, host, function() {
   console.log(`Server started on port ${port}...`);
 });
+
+module.exports = server;

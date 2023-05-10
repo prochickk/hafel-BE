@@ -1,4 +1,7 @@
 {
   "delay": 1000,
-  "maxImageCount": 3
+  "maxImageCount": 3,
+  "jwtPrivateKey": "1234",
+  "db": "mongodb+srv://bus123:12345@cluster0.kx3lumu.mongodb.net/?retryWrites=true&w=majority"
+
 }

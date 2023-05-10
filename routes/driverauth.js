@@ -3,9 +3,9 @@ const router = express.Router();
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const validateWith = require("../middleware/validation");
-const driversStore = require('../store/drivers')
+const driversStore = require('../module/drivers')
 
-const Driver = require('../store/Driver');
+const Driver = require('../module/Driver');
 
 const schema = {
   email: Joi.string().email().required(),
@@ -15,7 +15,6 @@ const schema = {
 router.post("/", validateWith(schema), async(req, res) => {
   const { email, password } = req.body;
 
-  // const driver = driversStore.getdriverByEmail(email);
   const driverr = await Driver.find({ email: email })
   const driver  = driverr[0]
 
@@ -35,7 +34,7 @@ router.post("/", validateWith(schema), async(req, res) => {
        },
     "jwtPrivateKey"
   );
-  res.send(token);
+  res.status(200).send(token);
 });
 
 module.exports = router;

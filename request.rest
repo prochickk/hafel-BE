@@ -7,7 +7,9 @@ GET http://localhost:9000/api/privacyPolicy
 ###
 GET http://localhost:9000/api/listings?userId= 4
 ###
-GET http://localhost:9000/api/addresses?userId= 17
+GET http://localhost:9000/api/addresses
+###
+GET http://localhost:9000/api/address/64184f10de053c52c2509f27
 ###
 GET http://localhost:9000/api/schedules?userId= 4
 ###

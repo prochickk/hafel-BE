@@ -3,9 +3,9 @@ const router = express.Router();
 const Joi = require("joi");
 const { Expo } = require("expo-server-sdk");
 
-const usersStore = require("../store/users");
-const listingsStore = require("../store/listings");
-const messagesStore = require("../store/messages");
+const usersStore = require("../module/users");
+const listingsStore = require("../module/listings");
+const messagesStore = require("../module/messages");
 const sendPushNotification = require("../utilities/pushNotifications");
 const auth = require("../middleware/auth");
 const validateWith = require("../middleware/validation");

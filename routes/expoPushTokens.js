@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 
-const usersStore = require("../store/users");
+const usersStore = require("../module/users");
 const auth = require("../middleware/auth");
 const validateWith = require("../middleware/validation");
 

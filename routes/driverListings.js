@@ -9,12 +9,12 @@ const validateWith = require("../middleware/validation");
 const auth = require("../middleware/auth");
 const delay = require("../middleware/delay");
 const config = require("config");
-const Idserial = require('../store/Idserial')
+const Idserial = require('../module/Idserial')
 const defaultIdSerial = 30000;
 
-const Listing = require('../store/Listing');
-const User = require('../store/User');
-const Address = require("../store/Address");
+const Listing = require('../module/Listing');
+const User = require('../module/User');
+const Address = require("../module/Address");
 
 const upload = multer({
   dest: "uploads/",
@@ -31,7 +31,7 @@ const schema = {
   useId: Joi.number().required(),
 };
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
 
   let dateTo = moment().format("yyyy-MM-DDTHH:mm:ss.SSS");
   let dateFrom = moment().subtract(5,'d').format("yyyy-MM-DDTHH:mm:ss.SSS");
@@ -58,7 +58,7 @@ router.get("/", async (req, res) => {
       filteredObject["tripTypeL"] = req.query.goBackFilter
     }
     
-    let listings = await Listing.find(filteredObject)
+    let listings = await Listing.find(filteredObject);
 
     if (!listings[0]) {
       listings = [{
@@ -66,8 +66,7 @@ router.get("/", async (req, res) => {
         tripTimeL: '', tripDayL: 'لا يوجد أي عنصر', addressL: 0, idListing: 0,
       }]
     }
-    
-    res.send(listings);
+    res.status(200).send(listings);
 
   } catch (error) {
     console.log(error.message)
@@ -76,7 +75,7 @@ router.get("/", async (req, res) => {
 
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", auth, async (req, res) => {
   const listingId = req.query.listingId
   try {
 
@@ -87,23 +86,16 @@ router.delete("/", async (req, res) => {
     console.log(error.message)
     return res.status(404).send(error.message)
   }
-  // res.status(201).send(listing);
+  res.status(201).send();
 });
 
 router.post(
-  "/",
+  "/", auth,
   [upload.array("images", config.get("maxImageCount")),
   validateWith(schema)], async (req, res) => {
-    const listing = {
-      typeCateLabelL: req.body.typeCateLabelListing,
-      timeCateLabelL: req.body.timeCateLabelListing,
-      dayCateIdL: req.body.dayCateLabelListing,
-      addressCateIdL: req.body.addressCateIdListing,
-      descriptionL: req.body.descriptionListing,
-      groupL: req.body.groupListing,
-      useId: req.body.useId,
-    };
 
+    if (!req.body || !req.body.groupListing) return res.status(404).send('the given form is not correct');
+    
     try {
       let IdserialImport = await Idserial.findOne()
 
@@ -114,8 +106,9 @@ router.post(
       const IdserialDbUpdate = await Idserial.updateOne(
         { idListing: IdserialImport.idListing },
         { $inc: { idListing: 1 } });
+        
 
-      const listingdb = await Listing.create({
+      const listingdb = new Listing({
         tripTypeL: req.body.typeCateLabelListing,
         tripTimeL: req.body.timeCateLabelListing,
         tripDayL: req.body.dayCateLabelListing,
@@ -126,11 +119,14 @@ router.post(
         idListing: IdserialImport.idListing + 1,
       })
 
+      await listingdb.save();
+      res.status(201).send(listingdb);
+      
+
     } catch (error) {
       console.log(error.message)
       return res.status(404).send(error.message)
     }
-    res.status(201).send(listing);
   }
 );
 

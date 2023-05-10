@@ -3,9 +3,9 @@ const router = express.Router();
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const validateWith = require("../middleware/validation");
-const usersStore = require('../store/users')
+const usersStore = require('../module/users')
 
-const User = require('../store/User');
+const User = require('../module/User');
 
 const schema = {
   email: Joi.string().email().required(),
@@ -15,7 +15,6 @@ const schema = {
 router.post("/", validateWith(schema), async(req, res) => {
   const { email, password } = req.body;
 
-  // const user = usersStore.getUserByEmail(email);
   const userr = await User.find({ email: email })
   const user  = userr[0]
 
@@ -35,7 +34,7 @@ router.post("/", validateWith(schema), async(req, res) => {
        },
     "jwtPrivateKey"
   );
-  res.send(token);
+  res.status(200).send(token);
 });
 
 module.exports = router;

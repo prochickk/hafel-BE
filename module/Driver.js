@@ -13,6 +13,7 @@ const driverSchema = new mongoose.Schema({
 },
   mobileNumber: {
     type: Number,
+    require: true,
     minLength: 10,
     maxLength: 10,
 },

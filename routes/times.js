@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const Times = require('../store/Times');
+const Times = require('../module/Times');
 
 router.get("/", async (req, res) => {
     try {
