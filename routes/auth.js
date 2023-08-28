@@ -37,4 +37,17 @@ router.post("/", validateWith(schema), async(req, res) => {
   res.status(200).send(token);
 });
 
+router.delete("/", validateWith(schema), async (req, res) => {
+  const { email, password } = req.query
+  try {
+
+    const userDelete = await User.deleteOne({ email: email })
+    res.status(201).send();
+
+  } catch (error) {
+    console.log(error.message)
+    return res.status(404).send(error.message)
+  }
+});
+
 module.exports = router;
