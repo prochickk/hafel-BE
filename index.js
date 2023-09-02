@@ -18,6 +18,7 @@ const driverSchedules = require("./routes/driverSchedules");
 
 const times = require("./routes/times");
 const regions = require("./routes/regions");
+const groupsList = require("./routes/groupsList");
 const listings = require("./routes/listings");
 const listing = require("./routes/listing");
 
@@ -61,6 +62,10 @@ const Listing = require("./module/Listing");
 const ListingHistory = require("./module/ListingsHistory");
 const Times = require("./module/Times");
 const Address = require('./module/Address')
+const HouseRegion = require('./module/HouseRegion')
+const Section = require('./module/Section')
+const University = require('./module/University')
+
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -76,6 +81,7 @@ app.use("/api/addressCates", addressCates);
 app.use("/api/nearLocCates", nearLocCates);
 app.use("/api/privacyPolicy", privacyPolicy);
 
+app.use("/api/groupsList", groupsList);
 app.use("/api/regions", regions);
 app.use("/api/times", times);
 
@@ -107,10 +113,15 @@ app.use("/api/driverauth", driverauth);
 app.use("/api/expoPushTokens", expoPushTokens);
 app.use("/api/messages", messages);
 
-app.get("/api", async (req, res) => {
-  res.send("hi")
+app.get("/api/groupsList", async (req, res) => {
   // try {
-  //   const Addresses= await Address.updateMany({value: {$exists: true}},  { $unset: { value: "" }});
+    res.send("hi")
+})
+
+app.get("/api", async (req, res) => {
+  // try {
+    res.send("hi")
+    //   const Addresses= await Address.updateMany({value: {$exists: true}},  { $unset: { value: "" }});
   //   // const Timeselement = await Times.create({type: "back", value: "13:45-14:15", icon: "timer-outline"});
   //    res.send(Addresses) 
   // } catch (error) {
@@ -132,8 +143,8 @@ app.get("/api", async (req, res) => {
 })
 
 
-// const port = process.env.PORT || config.get("port");
-const port = process.env.PORT || 9000
+const port = process.env.PORT || config.get("port");
+// const port = process.env.PORT || 9000
 const host = '0.0.0.0';
 
 const server = app.listen(port, host, function() {
