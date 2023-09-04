@@ -19,6 +19,7 @@ const driverSchedules = require("./routes/driverSchedules");
 const times = require("./routes/times");
 const regions = require("./routes/regions");
 const groupsList = require("./routes/groupsList");
+const groupsPrices = require("./routes/groupsPrices");
 const listings = require("./routes/listings");
 const listing = require("./routes/listing");
 
@@ -62,9 +63,7 @@ const Listing = require("./module/Listing");
 const ListingHistory = require("./module/ListingsHistory");
 const Times = require("./module/Times");
 const Address = require('./module/Address')
-const HouseRegion = require('./module/HouseRegion')
-const Section = require('./module/Section')
-const University = require('./module/University')
+
 
 
 app.use(express.static("public"));
@@ -82,6 +81,7 @@ app.use("/api/nearLocCates", nearLocCates);
 app.use("/api/privacyPolicy", privacyPolicy);
 
 app.use("/api/groupsList", groupsList);
+app.use("/api/groupsPrices", groupsPrices);
 app.use("/api/regions", regions);
 app.use("/api/times", times);
 
@@ -113,20 +113,29 @@ app.use("/api/driverauth", driverauth);
 app.use("/api/expoPushTokens", expoPushTokens);
 app.use("/api/messages", messages);
 
-app.get("/api/groupsList", async (req, res) => {
-  // try {
-    res.send("hi")
-})
-
 app.get("/api", async (req, res) => {
   // try {
-    res.send("hi")
-    //   const Addresses= await Address.updateMany({value: {$exists: true}},  { $unset: { value: "" }});
-  //   // const Timeselement = await Times.create({type: "back", value: "13:45-14:15", icon: "timer-outline"});
-  //    res.send(Addresses) 
+    return res.send('hi')
+  //   const create = await Regions.create({   
+  //     id: 21,
+  //     group: 'الباشا',
+  //     name: String,
+  //     adminId: 501,
+  //     adminNumber: 540960959,
+  //     section: "العليا",
+  //     university: "البترول",})
+  //   const universities = await Regions.find()
+  //   console.log('universities', universities)
+  //   return res.send(universities)
+
   // } catch (error) {
+  //   console.log(error.message)
   //   return res.status(404).send(error.message)
   // }
+    
+
+
+
   // "timer-outline"
   // "timer"
   // let x0 = "Saturday"

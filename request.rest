@@ -3,7 +3,7 @@ GET http://localhost:9000/api/addres/631ffa435b418c5ba6a8e607
 ###
 GET http://localhost:9000/api
 ###
-GET http://localhost:9000/api/groupsList
+GET http://localhost:9000/api/groupsPrices
 ###
 GET http://localhost:9000/api/privacyPolicy
 ###

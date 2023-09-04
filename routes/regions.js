@@ -11,7 +11,6 @@ router.get("/", async (req, res) => {
       let groupRegions = await Regions.find({group: req.query.driverGroup})
 
       if (!groupRegions[0]) return res.status(404).send('Group is not found')
-
       res.status(200).send(groupRegions);
     }
 
