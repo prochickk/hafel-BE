@@ -13,6 +13,9 @@ const regionSchema = new mongoose.Schema({
   adminNumber: Number,
   section: String,
   university: String,
+  features: [String], 
+  image: Buffer,
+  logoImage: Buffer,
 
 })
 

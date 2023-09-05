@@ -7,7 +7,7 @@ GET http://localhost:9000/api/groupsPrices
 ###
 GET http://localhost:9000/api/privacyPolicy
 ###
-GET http://localhost:9000/api/listings?userId= 4
+GET http://localhost:9000/api/public/assets/logos/noBGLogo.png"
 ###
 GET http://localhost:9000/api/addresses
 ###

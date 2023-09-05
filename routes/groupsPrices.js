@@ -7,16 +7,22 @@ router.get("/", async (req, res) => {
 
     try {
 
-        console.log('universities')
         const filteredGroups = await Regions.find({
             name : req.query.region,
             section : req.query.section,
             university : req.query.university})
 
         const finalGroupsList = [...new Set(filteredGroups.map(obj => obj.group))];
-
         const groupsPrices = await Regions.find({groupList : finalGroupsList})
-        console.log('groupsPrices', groupsPrices)
+
+        if (!groupsPrices[0]) {
+            groupsPrices[0] = {
+                monthlyPrice : 'لا يوجد شركات تخدم هذه المنطقة',
+                groupList : 0,
+                id : 0,
+            }
+        }
+        
         res.send(groupsPrices);
 
     } catch (error) {

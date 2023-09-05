@@ -115,18 +115,18 @@ app.use("/api/messages", messages);
 
 app.get("/api", async (req, res) => {
   // try {
+
     return res.send('hi')
-  //   const create = await Regions.create({   
-  //     id: 21,
-  //     group: 'الباشا',
-  //     name: String,
-  //     adminId: 501,
-  //     adminNumber: 540960959,
-  //     section: "العليا",
-  //     university: "البترول",})
-  //   const universities = await Regions.find()
-  //   console.log('universities', universities)
-  //   return res.send(universities)
+//     const create = await Regions.create({   
+      
+// groupList: "بن احمد",
+// monthlyPrice: 500,
+// id:3,
+// features: ['يتردد خلال جميع ساعات الدوام', 'باصات حديثة', 'توفير الانترنت في الباص', "سريع"]
+// })
+//     const universities = await Regions.find()
+//     console.log('universities', universities)
+//     return res.send(universities)
 
   // } catch (error) {
   //   console.log(error.message)
